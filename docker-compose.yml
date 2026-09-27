@@ -1,0 +1,12 @@
+services:
+  wdmt:
+    build: .
+    container_name: wdmt-studio
+    restart: unless-stopped
+    ports:
+      - "${WDMT_PORT:-5555}:3000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PORT=3000
+

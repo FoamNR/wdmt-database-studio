@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Production / Builds
+dist/
+dist-server/
+client/dist/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment & Sensitive Vault Keys
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+data/.vault_key
+data/connections.json
+
+# Keep data directory structure
+!data/.gitkeep
+!data/sample_ecommerce.sqlite
+
+# OS and Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
