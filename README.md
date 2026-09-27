@@ -4,8 +4,8 @@
 
   # ⚡ WDMT — Web-based Database Management Tool
   
-  **Modern, Ultra-Fast, Self-Hosted Multi-Database Studio**  
-  *จัดการฐานข้อมูลผ่านเว็บเบราว์เซอร์ เรียบง่าย รวดเร็ว ปลอดภัย และทรงพลัง*
+  **Modern, High-Performance, Self-Hosted Multi-Database Studio**  
+  *Fast, secure, and intuitive database management in your browser.*
 
   <br />
 
@@ -19,25 +19,27 @@
 
 ---
 
-## 🌟 ภาพรวมระบบ (Overview)
+## 🌟 Overview
 
-**WDMT Studio** (Web-based Database Management Tool) เป็นเครื่องมือจัดการฐานข้อมูลยุคใหม่ที่ทำงานผ่าน Web Browser พัฒนาด้วยเทคโนโลยี React 19, TypeScript และ Node.js 24 มอบประสบการณ์การทำงานที่ลื่นไหลระดับ Desktop Application พร้อมระบบความปลอดภัยระดับองค์กร
+**WDMT Studio** is a next-generation web-based database client crafted for developers, DBAs, and engineering teams. Engineered with **React 19**, **TypeScript**, and **Node.js 24**, it delivers the desktop-grade snappiness and rich functionality of native tools while remaining 100% self-hosted, lightweight, and containerized.
+
+Whether managing local databases, enterprise SQL Server clusters, or cloud-hosted PostgreSQL/MySQL instances behind SSH Bastion jump hosts, WDMT provides a unified, responsive interface without external third-party dependencies.
 
 ---
 
-## 📸 ภาพตัวอย่างการใช้งาน (Screenshots)
+## 📸 Screenshots
 
 ### 1. Monaco SQL Editor & Live Autocomplete
-> เขียนคำสั่ง SQL ได้รวดเร็วพร้อมระบบ IntelliSense Autocomplete อัจฉริยะ แนะนำชื่อตาราง/คอลัมน์แบบ Real-time และตารางผลลัพธ์แบบ Virtualized
+> Write queries with ease using Monaco-powered IntelliSense autocomplete for keywords, tables, columns, and templates, accompanied by virtualized high-speed results rendering.
 
 <div align="center">
-  <img src="docs/screenshots/sql_editor.png" alt="SQL Editor with Autocomplete" width="95%" />
+  <img src="docs/screenshots/sql_editor.png" alt="Monaco SQL Editor with Autocomplete" width="95%" />
 </div>
 
 <br />
 
 ### 2. Table Structure, Schema & DDL Explorer
-> ตรวจสอบโครงสร้างตาราง, ชนิดข้อมูล (Data Types), Primary Keys, Auto Increment / Identity, Foreign Keys, Indexes และดูคำสั่ง DDL (`CREATE TABLE`) ได้อย่างละเอียด
+> Inspect column definitions, data types, nullability, primary keys, auto-increment / serial identities, foreign keys, and indexes with generated `CREATE TABLE` DDL.
 
 <div align="center">
   <img src="docs/screenshots/table_structure.png" alt="Table Structure View" width="95%" />
@@ -46,7 +48,7 @@
 <br />
 
 ### 3. Connection Profiles & SSH Bastion Host Tunneling
-> เชื่อมต่อฐานข้อมูลได้หลากหลายเครื่องยนต์ พร้อมระบบ SSH Tunneling ทะลวงเข้า Private Subnet / VPC ได้อย่างปลอดภัย
+> Connect securely to any database engine with built-in in-memory SSH port forwarding for VPC / private subnet access.
 
 <div align="center">
   <img src="docs/screenshots/connection_modal.png" alt="Connection Profile and SSH Tunnel Modal" width="75%" />
@@ -54,132 +56,143 @@
 
 ---
 
-## ✨ ฟังก์ชันเด่น (Key Features)
+## ✨ Key Features
 
-- 🗄️ **Multi-Engine SQL Support**: รองรับ 4 เครื่องยนต์ฐานข้อมูลยอดนิยม:
-  - 🐘 **PostgreSQL** (12 - 17+)
+- 🗄️ **Multi-Engine SQL Support**:
+  - 🐘 **PostgreSQL** (12 – 17+)
   - 🐬 **MySQL / MariaDB** (5.7, 8.0, 10.x)
-  - 🪶 **SQLite** (Native Sync Engine `node:sqlite`)
+  - 🪶 **SQLite** (Powered by Node.js 24 Native Engine `node:sqlite`)
   - 🏢 **Microsoft SQL Server (MSSQL)** (2017, 2019, 2022)
 - ⚡ **High-Performance Virtualized DataGrid**:
-  - แสดงผลข้อมูลได้หลายหมื่นแถวอย่างลื่นไหลด้วย Virtual Scrolling
-  - **Inline Cell Editing**: ดับเบิลคลิกแก้ไขข้อมูลในเซลล์ได้ทันที
-  - เพิ่มแถวใหม่ (Insert Row Modal) พร้อมระบบ Auto-Increment / Serial Detector
-- 💻 **Monaco SQL Editor (VS Code Power)**:
-  - Syntax Highlighting & Formatting
-  - **SQL IntelliSense / Autocomplete**: แนะนำคีย์เวิร์ด, ฟังก์ชัน, ชื่อตาราง และคอลัมน์จากฐานข้อมูลที่เชื่อมต่ออยู่
-  - คีย์ลัด `Ctrl + Enter` (หรือ `Cmd + Enter`) เพื่อสั่งรัน Query ทันที
-  - รองรับ Multi-Tabs แยกตารางและ Query อิสระ
+  - Smooth 60fps rendering for tens of thousands of rows using virtualized viewport scrolling.
+  - **Inline Cell Editing**: Double-click any cell to edit and auto-commit back to the database.
+  - **Insert Row Modal**: Context-aware row creation with auto-increment detection across all engines.
+- 💻 **Monaco SQL Editor (VS Code Powered)**:
+  - Syntax highlighting, SQL formatting, multi-statement execution, and query limit toggling.
+  - **Live IntelliSense Autocomplete**: Context-sensitive suggestions for SQL keywords, active tables, schemas, and columns.
+  - Quick execution shortcut: <kbd>Ctrl</kbd> + <kbd>Enter</kbd> (or <kbd>Cmd</kbd> + <kbd>Enter</kbd>).
+  - Multi-tab workspace with isolated query contexts.
 - 🧱 **Schema & DDL Inspector**:
-  - สำรวจ Tables, Views, Columns, Constraints, Indexes
-  - สร้าง SQL DDL สำหรับนำไปสร้างตารางซ้ำได้อย่างแม่นยำ
-- 🔒 **SSH Bastion Tunneling**:
-  - เชื่อมต่อไปยัง Database ที่อยู่ใน Private Network ผ่าน Bastion Host (SSH Password หรือ Private Key)
-  - สตรีมพอร์ตในหน่วยความจำ (In-memory stream) ไม่เปิดพอร์ตภายนอก ปลอดภัยสูงสุด
+  - Deep inspection of tables, views, columns, types, foreign key relations, and indexes.
+  - Auto-generated DDL definitions for reproducible table creation.
+- 🔒 **SSH Bastion Host Tunneling**:
+  - Route traffic to private databases via SSH jump hosts using password or private key authentication.
+  - Memory-only tunneling streams without opening insecure local host ports.
 - 🔐 **AES-256-GCM Encrypted Vault**:
-  - เข้ารหัสรหัสผ่านและข้อมูลสำคัญทั้งหมดด้วย Master Key เฉพาะตัว
-- 🌓 **Theme Switcher**:
-  - สลับระหว่าง **Light Mode** (ค่าเริ่มต้น สบายตา) และ **Dark Mode** (Linear Obsidian)
-- 📦 **Data Export**:
-  - ส่งออกผลลัพธ์เป็น **CSV, JSON หรือ SQL Insert Dump** ได้ในคลิกเดียว
+  - All stored credentials, passwords, and private keys are encrypted on-disk using authenticated AES-256-GCM.
+- 🌓 **Dual Theme Engine**:
+  - Comes with clean **Light Mode** as default and high-contrast **Dark Mode** (Linear Obsidian) with persistent user preference.
+- 📦 **Data Export & Dumps**:
+  - 1-click export of queries and tables into **CSV**, **JSON**, or raw **SQL INSERT** dumps.
 - 🪄 **1-Click Sample Database**:
-  - มีปุ่มสร้างฐานข้อมูลจำลอง E-Commerce (SQLite) ให้ทดลองใช้งานระบบได้ทันที
+  - Instant SQLite E-Commerce sandbox with preloaded tables and relational data for immediate testing.
 
 ---
 
-## 🛠️ สถาปัตยกรรมระบบ (Tech Stack)
+## 🛠️ Architecture & Tech Stack
 
-| ส่วนประกอบ | เทคโนโลยี |
-| :--- | :--- |
-| **Backend** | Node.js 24 LTS, Express, TypeScript, `node:sqlite`, `node:crypto` |
-| **Frontend** | React 19, TypeScript, Vite, Monaco Editor, Lucide Icons |
-| **Drivers** | `pg` (PostgreSQL), `mysql2` (MySQL), `tedious` (MSSQL), `node:sqlite` (SQLite) |
-| **Security** | `ssh2` (SSH Tunnel), AES-256-GCM Vault |
-| **Deployment** | Docker Multi-stage Build, Docker Compose |
+| Component | Technology | Description |
+| :--- | :--- | :--- |
+| **Backend** | Node.js 24 LTS, Express, TypeScript | High-throughput asynchronous API backend |
+| **Frontend** | React 19, TypeScript, Vite | Modern, responsive SPA architecture |
+| **Code Editor** | Monaco Editor (`@monaco-editor/react`) | Full VS Code editor core with custom IntelliSense |
+| **Database Drivers** | `pg`, `mysql2`, `tedious`, `node:sqlite` | Official, high-reliability engine drivers |
+| **Security** | `ssh2`, `node:crypto` (AES-256-GCM) | Encrypted storage vault & in-memory SSH tunneling |
+| **Container** | Docker & Docker Compose | Multi-stage Alpine build under 250MB |
 
 ---
 
-## 🚀 วิธีการติดตั้งและรันใช้งาน (Getting Started)
+## 🚀 Quick Start
 
-### วิธีที่ 1: รันผ่าน Docker Compose (แนะนำ สะดวกที่สุด ⭐)
+### Method 1: Docker Compose (Recommended ⭐)
 
-1. Clone repository:
+1. Clone the repository:
    ```bash
    git clone https://github.com/FoamNR/wdmt-database-studio.git
    cd wdmt-database-studio
    ```
 
-2. สั่งรันด้วย Docker Compose:
+2. Launch the container:
    ```bash
    docker compose up -d --build
    ```
 
-3. เข้าใช้งานผ่านเบราว์เซอร์:
-   - URL: **`http://localhost:5555`**
-   - *(ข้อมูล Connections และไฟล์ SQLite จะถูกจัดเก็บไว้ในโฟลเดอร์ `./data` อย่างปลอดภัย)*
+3. Open your browser:
+   - Navigate to: **`http://localhost:5555`**
+   - *(All connections and SQLite databases are safely persisted in `./data`)*
 
 ---
 
-### วิธีที่ 2: รันด้วย Node.js ในเครื่อง (Local Run)
+### Method 2: Local Node.js
 
-**ความต้องการของระบบ:**
-- Node.js version 22+ (แนะนำ Node.js 24)
-- npm version 10+
+**Prerequisites:**
+- Node.js 22+ (Node.js 24 recommended)
+- npm 10+
 
-1. ติดตั้ง Dependencies สำหรับ Server และ Client:
+1. Install root and client dependencies:
    ```bash
    npm install
    npm --prefix client install
    ```
 
-2. Build โปรเจกต์:
+2. Build the application:
    ```bash
    npm run build
    ```
 
-3. สตาร์ตเซิร์ฟเวอร์:
+3. Start the server:
    ```bash
    npm start
    ```
-   เปิดเบราว์เซอร์ที่: **`http://localhost:3000`**
+   Open **`http://localhost:3000`** in your browser.
 
 ---
 
-### วิธีที่ 3: โหมดพัฒนา (Development Mode)
+### Method 3: Development Mode
 
 ```bash
-# รันทั้ง Backend และ Frontend ในโหมด Dev พร้อม Hot Reloading
+# Starts both the backend API and Vite dev server with Hot Module Replacement (HMR)
 npm run dev
 ```
 
 - **Backend API**: `http://localhost:3000`
-- **Frontend Vite**: `http://localhost:5173`
+- **Frontend Vite Client**: `http://localhost:5173`
 
 ---
 
-## ⚙️ การตั้งค่าสภาพแวดล้อม (Configuration)
+## ⚙️ Configuration
 
-คุณสามารถสร้างไฟล์ `.env` ที่ root directory เพื่อกำหนดค่าเพิ่มเติม:
+Customize runtime settings via environment variables or a `.env` file in the root directory:
 
 ```ini
-# Port สำหรับเปิด Web Studio (ค่าเริ่มต้น: 5555 ใน Docker, 3000 ใน Local)
+# Application port (Default: 5555 in Docker, 3000 in standalone Node)
 WDMT_PORT=5555
 
-# Master Encryption Key (ถ้าไม่ระบุ ระบบจะสร้าง .vault_key ให้อัตโนมัติในโฟลเดอร์ data/)
+# Master Encryption Key (Optional: will auto-generate in data/.vault_key if omitted)
 # VAULT_MASTER_KEY=your-32-byte-hex-key
 ```
 
 ---
 
-## 🛡️ ความปลอดภัย (Security Architecture)
+## ⌨️ Keyboard Shortcuts
 
-1. **Zero Cleartext Credentials**: รหัสผ่านและ Private Key จะถูกเข้ารหัสด้วย **AES-256-GCM** ทุกครั้งก่อนบันทึกลงดิสก์
-2. **Sanitized Output**: API จะทำการ Masked รหัสผ่านออกเสมอเมื่อส่งข้อมูล Connection Profile กลับมาที่ Frontend
-3. **In-Memory SSH Forwarding**: Tunneling ถูกจัดการผ่าน In-memory Duplex Stream และตัดการเชื่อมต่อทันทีเมื่อไม่ได้ใช้งาน
-4. **Self-Hosted & Privacy-First**: ทำงาน 100% ภายในเครื่องหรือ Server ของคุณเอง ไม่มีการส่งข้อมูลใดๆ ออกนอกระบบ
+| Shortcut | Action |
+| :--- | :--- |
+| <kbd>Ctrl</kbd> + <kbd>Enter</kbd> / <kbd>Cmd</kbd> + <kbd>Enter</kbd> | Execute SQL query in active editor tab |
+| <kbd>Ctrl</kbd> + <kbd>B</kbd> / <kbd>Cmd</kbd> + <kbd>B</kbd> | Toggle sidebar open / collapse |
+| <kbd>Ctrl</kbd> + <kbd>Space</kbd> | Trigger Monaco SQL IntelliSense suggestions |
 
 ---
 
-## 📄 ใบอนุญาต (License)
+## 🛡️ Security & Privacy
 
-โปรเจกต์นี้เผยแพร่ภายใต้สัญญาอนุญาต [MIT License](LICENSE) — สามารถนำไปใช้งาน ปรับแต่ง และพัฒนาต่อได้อย่างอิสระ
+1. **Zero Cleartext Credentials**: All database passwords and SSH keys are encrypted with **AES-256-GCM** before writing to disk.
+2. **Sanitized Output**: Sensitive credential values are automatically stripped before transmitting connection configurations to the client.
+3. **In-Memory SSH Forwarding**: SSH tunnels are established entirely within Node.js duplex streams and terminated upon driver disposal.
+4. **100% Self-Hosted**: No telemetry, no external trackers, and no remote dependencies.
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE) — feel free to use, modify, and distribute it for personal or commercial projects.
