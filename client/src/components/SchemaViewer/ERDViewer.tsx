@@ -92,7 +92,7 @@ export const ERDViewer: React.FC<ERDViewerProps> = ({
 
   useEffect(() => {
     fetchERD();
-  }, [fetchERD]);
+  }, [fetchERD, schemas]);
 
   // 2. Auto Layout Algorithm
   const autoArrangeNodes = (tables: ERDTableNode[], relationships: ERDRelationship[]) => {

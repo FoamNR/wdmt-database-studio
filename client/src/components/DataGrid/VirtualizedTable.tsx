@@ -24,6 +24,7 @@ interface VirtualizedTableProps {
   tableName: string;
   schema?: string;
   onOpenExportModal: (table: string, schema?: string) => void;
+  onRefreshSchema?: () => void;
 }
 
 export const VirtualizedTable: React.FC<VirtualizedTableProps> = ({
@@ -31,6 +32,7 @@ export const VirtualizedTable: React.FC<VirtualizedTableProps> = ({
   tableName,
   schema,
   onOpenExportModal,
+  onRefreshSchema,
 }) => {
   const [data, setData] = useState<QueryResult | null>(null);
   const [structure, setStructure] = useState<TableStructure | null>(null);
@@ -208,6 +210,7 @@ export const VirtualizedTable: React.FC<VirtualizedTableProps> = ({
       await ApiService.deleteRow(connectionId, tableName, schema, pkMap);
       showToast('Row deleted');
       loadData();
+      onRefreshSchema?.();
     } catch (err: any) {
       alert(`Delete failed: ${err.message}`);
     }
@@ -228,6 +231,7 @@ export const VirtualizedTable: React.FC<VirtualizedTableProps> = ({
       setIsAddRowOpen(false);
       setNewRowData({});
       loadData();
+      onRefreshSchema?.();
     } catch (err: any) {
       alert(`Insert failed: ${err.message}`);
     } finally {

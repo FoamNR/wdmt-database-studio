@@ -27,6 +27,7 @@ interface SQLEditorTabProps {
   schemas?: SchemaMeta[];
   theme?: 'light' | 'dark';
   onOpenExportModal: (table?: string, schema?: string, sql?: string) => void;
+  onRefreshSchema?: () => void;
 }
 
 export const SQLEditorTab: React.FC<SQLEditorTabProps> = ({
@@ -36,6 +37,7 @@ export const SQLEditorTab: React.FC<SQLEditorTabProps> = ({
   schemas = [],
   theme = 'light',
   onOpenExportModal,
+  onRefreshSchema,
 }) => {
   const [sql, setSql] = useState(initialSql);
   const [selectedSchema, setSelectedSchema] = useState<string>(
@@ -180,6 +182,17 @@ export const SQLEditorTab: React.FC<SQLEditorTabProps> = ({
       setActiveResultIndex(0);
       setSearchFilter('');
       setSortState({ dir: 'ASC' });
+
+      // Realtime schema & sidebar refresh on DDL / DML operations
+      if (!res.error && onRefreshSchema) {
+        const normalized = queryText.toUpperCase();
+        const modifiesSchemaOrData = /\b(CREATE|DROP|ALTER|RENAME|TRUNCATE|INSERT|UPDATE|DELETE|REPLACE|VACUUM)\b/i.test(
+          normalized
+        );
+        if (modifiesSchemaOrData) {
+          onRefreshSchema();
+        }
+      }
     } catch (err: any) {
       setResult({
         columns: [],

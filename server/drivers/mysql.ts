@@ -38,21 +38,51 @@ export class MySQLDriver implements IDatabaseDriver {
       targetPort = this.tunnel.localPort;
     }
 
-    this.connection = await mysql.createConnection({
-      host: targetHost,
-      port: targetPort,
-      user: this.config.user,
-      password: this.config.password,
-      database: this.config.database,
-      ssl: this.config.ssl
-        ? {
-            rejectUnauthorized: this.config.sslRejectUnauthorized ?? false,
-          }
-        : undefined,
-      connectTimeout: 10000,
-      multipleStatements: true,
-      decimalNumbers: true,
-    });
+    try {
+      this.connection = await mysql.createConnection({
+        host: targetHost,
+        port: targetPort,
+        user: this.config.user,
+        password: this.config.password,
+        database: this.config.database,
+        ssl: this.config.ssl
+          ? {
+              rejectUnauthorized: this.config.sslRejectUnauthorized ?? false,
+            }
+          : undefined,
+        connectTimeout: 8000,
+        multipleStatements: true,
+        decimalNumbers: true,
+      });
+    } catch (err: any) {
+      // Fallback for Docker environment connecting to host machine database
+      if (
+        (targetHost === 'localhost' || targetHost === '127.0.0.1') &&
+        !this.config.sshTunnel?.enabled
+      ) {
+        try {
+          this.connection = await mysql.createConnection({
+            host: 'host.docker.internal',
+            port: targetPort,
+            user: this.config.user,
+            password: this.config.password,
+            database: this.config.database,
+            ssl: this.config.ssl
+              ? {
+                  rejectUnauthorized: this.config.sslRejectUnauthorized ?? false,
+                }
+              : undefined,
+            connectTimeout: 5000,
+            multipleStatements: true,
+            decimalNumbers: true,
+          });
+          return;
+        } catch {
+          // Keep original error
+        }
+      }
+      throw err;
+    }
   }
 
   public async testConnection(): Promise<{ success: boolean; message: string; version?: string }> {

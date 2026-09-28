@@ -446,6 +446,7 @@ export function App() {
                       onOpenExportModal={(tbl, sch) =>
                         setExportModalState({ isOpen: true, table: tbl, schema: sch })
                       }
+                      onRefreshSchema={loadSchemas}
                     />
                   )}
 
@@ -483,6 +484,7 @@ export function App() {
                       onOpenExportModal={(tbl, sch, sql) =>
                         setExportModalState({ isOpen: true, table: tbl, schema: sch, sql })
                       }
+                      onRefreshSchema={loadSchemas}
                     />
                   )}
                 </>

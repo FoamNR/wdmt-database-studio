@@ -52,8 +52,28 @@ export class PostgresDriver implements IDatabaseDriver {
       connectionTimeoutMillis: 10000,
     };
 
-    this.client = new pg.Client(clientConfig);
-    await this.client.connect();
+    try {
+      this.client = new pg.Client(clientConfig);
+      await this.client.connect();
+    } catch (err: any) {
+      if (
+        (targetHost === 'localhost' || targetHost === '127.0.0.1') &&
+        !this.config.sshTunnel?.enabled
+      ) {
+        try {
+          this.client = new pg.Client({
+            ...clientConfig,
+            host: 'host.docker.internal',
+            connectionTimeoutMillis: 5000,
+          });
+          await this.client.connect();
+          return;
+        } catch {
+          // Keep original error
+        }
+      }
+      throw err;
+    }
   }
 
   public async testConnection(): Promise<{ success: boolean; message: string; version?: string }> {

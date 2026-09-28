@@ -9,4 +9,6 @@ services:
       - ./data:/app/data
     environment:
       - PORT=3000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
