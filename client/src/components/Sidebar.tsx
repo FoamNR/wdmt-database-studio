@@ -14,6 +14,7 @@ import {
   Folder,
   Sparkles,
   X,
+  Network,
 } from 'lucide-react';
 import type { ConnectionConfig, SchemaMeta } from '../types';
 
@@ -29,6 +30,7 @@ interface SidebarProps {
   onOpenTableData: (table: string, schema?: string) => void;
   onOpenTableStructure: (table: string, schema?: string) => void;
   onOpenTableQuery: (table: string, schema?: string) => void;
+  onOpenERD?: (schema?: string) => void;
   onOpenExportModal: (table: string, schema?: string) => void;
   onGenerateSampleDb?: () => void;
   isLoadingSample?: boolean;
@@ -46,6 +48,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenTableData,
   onOpenTableStructure,
   onOpenTableQuery,
+  onOpenERD,
   onOpenExportModal,
   onGenerateSampleDb,
   isLoadingSample = false,
@@ -182,6 +185,30 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Explorer Tree */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '6px 4px' }}>
+        {/* Quick ER Diagram Action */}
+        {activeConnection && onOpenERD && !isLoadingSchemas && filteredSchemas.length > 0 && (
+          <div style={{ padding: '2px 4px 6px 4px' }}>
+            <button
+              className="btn btn-secondary btn-sm"
+              onClick={() => onOpenERD()}
+              style={{
+                width: '100%',
+                justifyContent: 'center',
+                height: '28px',
+                fontSize: '0.75rem',
+                borderColor: 'rgba(56, 189, 248, 0.3)',
+                color: '#38bdf8',
+                background: 'rgba(56, 189, 248, 0.05)',
+                fontWeight: 500,
+              }}
+              title="Open Interactive ER Diagram"
+            >
+              <Network size={13} color="#38bdf8" />
+              <span>Visual ER Diagram</span>
+            </button>
+          </div>
+        )}
+
         {isLoadingSchemas && (
           <div style={{ padding: '24px 16px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.775rem' }}>
             <div
@@ -234,6 +261,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {schema.name}
                   </span>
+
+                  {onOpenERD && (
+                    <button
+                      className="btn btn-ghost btn-sm btn-icon"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onOpenERD(schema.name);
+                      }}
+                      title={`View ${schema.name} ER Diagram`}
+                      style={{ height: '18px', width: '18px', padding: 0, opacity: 0.7 }}
+                    >
+                      <Network size={11} color="#38bdf8" />
+                    </button>
+                  )}
+
                   <span style={{ fontSize: '0.675rem', color: 'var(--text-dim)', background: 'var(--bg-surface-elevated)', padding: '1px 5px', borderRadius: '3px' }}>
                     {schema.tables.length}
                   </span>

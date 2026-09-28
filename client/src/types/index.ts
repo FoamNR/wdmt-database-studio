@@ -102,7 +102,37 @@ export interface TableStructure {
   ddl: string;
 }
 
-export type TabType = 'table-data' | 'table-structure' | 'query';
+export interface ERDTableNode {
+  name: string;
+  schema: string;
+  type: 'table' | 'view' | 'materialized_view';
+  columns: ColumnMeta[];
+  primaryKeys: string[];
+  foreignKeys: {
+    column: string;
+    referencedTable: string;
+    referencedColumn: string;
+    referencedSchema?: string;
+  }[];
+  rowCount?: number;
+}
+
+export interface ERDRelationship {
+  id: string;
+  sourceTable: string;
+  sourceSchema: string;
+  sourceColumn: string;
+  targetTable: string;
+  targetSchema: string;
+  targetColumn: string;
+}
+
+export interface ERDData {
+  tables: ERDTableNode[];
+  relationships: ERDRelationship[];
+}
+
+export type TabType = 'table-data' | 'table-structure' | 'query' | 'erd';
 
 export interface WorkspaceTab {
   id: string;
@@ -115,3 +145,4 @@ export interface WorkspaceTab {
   queryResult?: QueryResult;
   isExecuting?: boolean;
 }
+

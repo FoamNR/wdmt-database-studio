@@ -10,6 +10,7 @@ import {
   PanelLeftOpen,
   Sun,
   Moon,
+  Network,
 } from 'lucide-react';
 import type { ConnectionConfig } from '../types';
 
@@ -23,6 +24,7 @@ interface HeaderProps {
   onOpenConnectionModal: (conn?: ConnectionConfig) => void;
   onNewQueryTab: () => void;
   onRefreshSchema: () => void;
+  onOpenERD?: (schema?: string) => void;
   onGenerateSampleDb?: () => void;
   isLoadingSample?: boolean;
 }
@@ -37,6 +39,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenConnectionModal,
   onNewQueryTab,
   onRefreshSchema,
+  onOpenERD,
   onGenerateSampleDb,
   isLoadingSample = false,
 }) => {
@@ -151,6 +154,23 @@ export const Header: React.FC<HeaderProps> = ({
           <RefreshCw size={13} />
           <span>Refresh</span>
         </button>
+
+        {onOpenERD && (
+          <button
+            className="btn btn-secondary btn-sm"
+            onClick={() => onOpenERD()}
+            disabled={!activeConnection}
+            title="Open Interactive ER Diagram / Schema Visualizer"
+            style={{
+              borderColor: 'rgba(56, 189, 248, 0.3)',
+              color: '#38bdf8',
+              background: 'rgba(56, 189, 248, 0.06)',
+            }}
+          >
+            <Network size={13} color="#38bdf8" />
+            <span>ER Diagram</span>
+          </button>
+        )}
 
         <button
           className="btn btn-primary btn-sm"

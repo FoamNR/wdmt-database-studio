@@ -6,6 +6,7 @@ import {
   Plus,
   X,
   Sparkles,
+  Network,
 } from 'lucide-react';
 import type { ConnectionConfig, SchemaMeta, WorkspaceTab } from './types';
 import { ApiService } from './services/api';
@@ -14,6 +15,7 @@ import { Sidebar } from './components/Sidebar';
 import { ConnectionModal } from './components/ConnectionModal';
 import { VirtualizedTable } from './components/DataGrid/VirtualizedTable';
 import { TableStructureView } from './components/SchemaViewer/TableStructureView';
+import { ERDViewer } from './components/SchemaViewer/ERDViewer';
 import { SQLEditorTab } from './components/SQLEditor/SQLEditorTab';
 import { ExportModal } from './components/ExportModal';
 
@@ -207,6 +209,19 @@ export function App() {
     });
   };
 
+  const handleOpenERD = (schema?: string) => {
+    if (!activeConnection) return;
+    const targetSchema = schema && schema !== 'all' ? schema : 'all';
+    const id = `erd_${activeConnection.id}_${targetSchema}`;
+    openTab({
+      id,
+      title: targetSchema !== 'all' ? `ERD: ${targetSchema}` : 'ER Diagram',
+      type: 'erd',
+      connectionId: activeConnection.id,
+      schema: targetSchema,
+    });
+  };
+
   // 4. Sample DB Generator
   const handleGenerateSampleDb = async () => {
     setIsLoadingSample(true);
@@ -252,6 +267,7 @@ export function App() {
         }}
         onNewQueryTab={handleNewQueryTab}
         onRefreshSchema={loadSchemas}
+        onOpenERD={handleOpenERD}
         onGenerateSampleDb={handleGenerateSampleDb}
         isLoadingSample={isLoadingSample}
       />
@@ -274,6 +290,7 @@ export function App() {
           onOpenTableData={handleOpenTableData}
           onOpenTableStructure={handleOpenTableStructure}
           onOpenTableQuery={handleOpenTableQuery}
+          onOpenERD={handleOpenERD}
           onOpenExportModal={(tbl, sch) =>
             setExportModalState({ isOpen: true, table: tbl, schema: sch })
           }
@@ -290,6 +307,7 @@ export function App() {
               let Icon = Terminal;
               if (tab.type === 'table-data') Icon = TableIcon;
               if (tab.type === 'table-structure') Icon = FileCode;
+              if (tab.type === 'erd') Icon = Network;
 
               return (
                 <div
@@ -383,7 +401,7 @@ export function App() {
                   Minimalist high-performance database workspace for PostgreSQL, MySQL, SQLite, and SQL Server.
                 </p>
 
-                <div style={{ display: 'flex', gap: '8px' }}>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center' }}>
                   <button
                     className="btn btn-primary btn-sm"
                     onClick={() => {
@@ -393,6 +411,16 @@ export function App() {
                   >
                     <Plus size={14} /> Add Connection
                   </button>
+
+                  {activeConnection && (
+                    <button
+                      className="btn btn-secondary btn-sm"
+                      onClick={() => handleOpenERD()}
+                      style={{ borderColor: 'rgba(56, 189, 248, 0.3)', color: '#38bdf8' }}
+                    >
+                      <Network size={14} /> Schema ER Diagram
+                    </button>
+                  )}
 
                   <button
                     className="btn btn-secondary btn-sm"
@@ -427,6 +455,20 @@ export function App() {
                       connectionId={activeTab.connectionId}
                       tableName={activeTab.tableName}
                       schema={activeTab.schema}
+                      onOpenERD={handleOpenERD}
+                    />
+                  )}
+
+                  {activeTab.type === 'erd' && (
+                    <ERDViewer
+                      key={activeTab.id}
+                      connectionId={activeTab.connectionId}
+                      initialSchema={activeTab.schema}
+                      schemas={schemas}
+                      theme={theme}
+                      onOpenTableData={handleOpenTableData}
+                      onOpenTableStructure={handleOpenTableStructure}
+                      onOpenTableQuery={handleOpenTableQuery}
                     />
                   )}
 

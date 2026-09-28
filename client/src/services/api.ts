@@ -4,6 +4,7 @@ import type {
   QueryResult,
   SchemaMeta,
   TableStructure,
+  ERDData,
 } from '../types';
 
 const API_BASE = '/api';
@@ -51,6 +52,14 @@ export const ApiService = {
     const res = await fetch(`${API_BASE}/connections/${connectionId}/schemas`);
     const data = await res.json();
     if (!data.success) throw new Error(data.error || 'Failed to fetch database schemas');
+    return data.data;
+  },
+
+  async getERDData(connectionId: string, schema?: string): Promise<ERDData> {
+    const query = schema && schema !== 'all' ? `?schema=${encodeURIComponent(schema)}` : '';
+    const res = await fetch(`${API_BASE}/connections/${connectionId}/erd${query}`);
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error || 'Failed to fetch ER diagram data');
     return data.data;
   },
 

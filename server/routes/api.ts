@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import { ConnectionVault } from '../vault/storage.js';
 import { ConnectionManager } from '../services/connectionManager.js';
 import { DriverFactory } from '../drivers/factory.js';
-import { ConnectionConfig, PaginationOptions } from '../types.js';
+import { ConnectionConfig, PaginationOptions, ERDTableNode, ERDRelationship, ERDData } from '../types.js';
 import path from 'node:path';
 import fs from 'node:fs';
 
@@ -82,6 +82,59 @@ apiRouter.get('/connections/:id/schemas', async (req: Request, res: Response) =>
     const driver = await ConnectionManager.getDriver(id);
     const schemas = await driver.getSchemas();
     res.json({ success: true, data: schemas });
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 6.1 Get ERD Schema & Relationships
+apiRouter.get('/connections/:id/erd', async (req: Request, res: Response) => {
+  try {
+    const id = String(req.params.id);
+    const requestedSchema = (req.query.schema as string) || undefined;
+    const driver = await ConnectionManager.getDriver(id);
+    const schemas = await driver.getSchemas();
+
+    const targetSchemas = requestedSchema && requestedSchema !== 'all'
+      ? schemas.filter((s) => s.name.toLowerCase() === requestedSchema.toLowerCase())
+      : schemas;
+
+    const tables: ERDTableNode[] = [];
+    const relationships: ERDRelationship[] = [];
+
+    for (const s of targetSchemas) {
+      for (const t of s.tables) {
+        try {
+          const structure = await driver.getTableStructure(t.name, s.name);
+          tables.push({
+            name: t.name,
+            schema: s.name,
+            type: t.type,
+            columns: structure.columns,
+            primaryKeys: structure.primaryKeys,
+            foreignKeys: structure.foreignKeys,
+            rowCount: t.rowCount,
+          });
+
+          for (const fk of structure.foreignKeys) {
+            relationships.push({
+              id: `${s.name}.${t.name}.${fk.column}->${fk.referencedSchema || s.name}.${fk.referencedTable}.${fk.referencedColumn}`,
+              sourceTable: t.name,
+              sourceSchema: s.name,
+              sourceColumn: fk.column,
+              targetTable: fk.referencedTable,
+              targetSchema: fk.referencedSchema || s.name,
+              targetColumn: fk.referencedColumn,
+            });
+          }
+        } catch (tableErr) {
+          console.warn(`Failed to get structure for ERD: ${s.name}.${t.name}:`, tableErr);
+        }
+      }
+    }
+
+    const data: ERDData = { tables, relationships };
+    res.json({ success: true, data });
   } catch (err: any) {
     res.status(500).json({ success: false, error: err.message });
   }

@@ -9,6 +9,7 @@ import {
   RefreshCw,
   AlertCircle,
   Table as TableIcon,
+  Network,
 } from 'lucide-react';
 import type { TableStructure } from '../../types';
 import { ApiService } from '../../services/api';
@@ -17,12 +18,14 @@ interface TableStructureViewProps {
   connectionId: string;
   tableName: string;
   schema?: string;
+  onOpenERD?: (schema?: string) => void;
 }
 
 export const TableStructureView: React.FC<TableStructureViewProps> = ({
   connectionId,
   tableName,
   schema,
+  onOpenERD,
 }) => {
   const [structure, setStructure] = useState<TableStructure | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -65,10 +68,27 @@ export const TableStructureView: React.FC<TableStructureViewProps> = ({
             {schema ? `${schema}.${tableName}` : tableName} <span style={{ color: 'var(--text-dim)', fontWeight: 400 }}>— Schema & DDL</span>
           </span>
         </div>
-        <button className="btn btn-secondary btn-sm" onClick={loadStructure} disabled={isLoading}>
-          <RefreshCw size={12} className={isLoading ? 'animate-spin' : ''} />
-          Refresh
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          {onOpenERD && (
+            <button
+              className="btn btn-secondary btn-sm"
+              onClick={() => onOpenERD(schema)}
+              title="View this schema in ER Diagram"
+              style={{
+                borderColor: 'rgba(56, 189, 248, 0.3)',
+                color: '#38bdf8',
+                background: 'rgba(56, 189, 248, 0.05)',
+              }}
+            >
+              <Network size={12} color="#38bdf8" />
+              <span>ER Diagram</span>
+            </button>
+          )}
+          <button className="btn btn-secondary btn-sm" onClick={loadStructure} disabled={isLoading}>
+            <RefreshCw size={12} className={isLoading ? 'animate-spin' : ''} />
+            Refresh
+          </button>
+        </div>
       </div>
 
       {/* Sub-tabs Segmented Control */}
